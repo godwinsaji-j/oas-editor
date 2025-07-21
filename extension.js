@@ -11,6 +11,7 @@ const {openVirtualEditor} = require('./oas-editor-utils')
  */
 function activate(context) {
 	let configWebViewPanel;
+	let yamlEditor;
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "spec-portals" is now active!');
@@ -19,13 +20,7 @@ function activate(context) {
 	// Now provide the implementation of the command with  registerCommand
 	// The commandId parameter must match the command field in package.json
 	let disposable = vscode.commands.registerCommand('extension.viewConfig', function () {
-     configWebViewPanel = vscode.window.createWebviewPanel(
-      'configViewer',
-      'View Config',
-      vscode.ViewColumn.One,
-      { enableScripts: true }
-    );
-
+     configWebViewPanel = vscode.window.createWebviewPanel('configViewer', 'View Config', vscode.ViewColumn.One, { enableScripts: true });
     const configData = getConfigContent(context);
 	console.log("configData",configData)
     configWebViewPanel.webview.html = getWebviewContent(configData);
@@ -36,13 +31,18 @@ function activate(context) {
 		vscode.window.showInformationMessage('Hello World from spec-portals!');
 		configWebViewPanel.webview.onDidReceiveMessage(
 		message => {
-			if (message.command === 'openOAS') {
+			// if (message.command === 'openOAS') {
+			// 	openVirtualEditor(context,message.oasFilePath);
+			// }
+			if(message.command === 'open-oas-virtual-editor'){
 				openVirtualEditor(context,message.oasFilePath);
 			}
 		},
 		undefined,
 		context.subscriptions
 		);
+
+
 	context.subscriptions.push(disposable);
 	});
 	

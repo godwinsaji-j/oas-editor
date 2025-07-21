@@ -37,7 +37,9 @@ function getWebviewContent(config) {
       <pre>${formatted}</pre>
       <button id="open-oas-editor">🛠 Open OAS Editor</button>
 
-      <script src="./ui/js/config-home.js"></script>
+      <script>
+      ${fs.readFileSync(path.join(__dirname, '/ui/js/config-home.js'), 'utf8').toString()}
+      </script>
     </body>
     </html>
   `;
